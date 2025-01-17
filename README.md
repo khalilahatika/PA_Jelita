@@ -1,4 +1,5 @@
-# Judul PA Bahasa Indonesia
+# IMPLEMENTASI TEKNOLOGI AUGMENTED REALITY PADA PHOTOBOOTH INTERAKTIF TANPA KAMERA PEMINDAI KEDALAMAN UNTUK MENINGKATKAN PENGALAMAN PENGGUNA DALAM APLIKASI JELITA
+
 
 Ganti paragraf ini dengan penjelasan singkat mengenai aplikasi. Beri tahu pembaca, repository ini isinya aplikasi apa, siapa target penggunanya, dan apa saja fitur utamanya. Penjelasan dibuat **minimal** 250 karakter. Setelah penjelasan, beri screenshot **maksimal 3** buah. Jika aplikasi belum jadi, screenshot boleh diambil dari Bab 3 (perancangan antarmuka aplikasi).
 
@@ -14,7 +15,7 @@ Tampilan Utama                              | Tampilan Kata                     
 
 Nama            | Username Github | Posisi
 ----------------|-----------------|-----------
-Nama Mahasiswa1 | usernameMhs1    | Mahasiswa
-Nama Mahasiswa2 | usernameMhs2    | Mahasiswa
-Nama Pembimbing | usernamePbb     | Pembimbing
+Adam Aria Rahman | usernameMhs1    | Mahasiswa
+Khalilah Atika Akmal | khalilahatika   | Mahasiswa
+Fat’hah Noor Prawita | usernamePbb     | Pembimbing
 Nama Reviewer   | usernameRev     | Reviewer
