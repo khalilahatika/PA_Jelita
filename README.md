@@ -1,7 +1,7 @@
 # IMPLEMENTASI TEKNOLOGI AUGMENTED REALITY PADA PHOTOBOOTH INTERAKTIF TANPA KAMERA PEMINDAI KEDALAMAN UNTUK MENINGKATKAN PENGALAMAN PENGGUNA DALAM APLIKASI JELITA
 
 
-Ganti paragraf ini dengan penjelasan singkat mengenai aplikasi. Beri tahu pembaca, repository ini isinya aplikasi apa, siapa target penggunanya, dan apa saja fitur utamanya. Penjelasan dibuat **minimal** 250 karakter. Setelah penjelasan, beri screenshot **maksimal 3** buah. Jika aplikasi belum jadi, screenshot boleh diambil dari Bab 3 (perancangan antarmuka aplikasi).
+Proyek yang akan dibuat adalah sebuah  aplikasi mobile JELITA untuk photobooth yang interaktif dengan menggunakan teknologi Augmented Reality (AR) tanpa memerlukan kamera depth sensing. Aplikasi ini akan memanfaatkan body tracking dan AR untuk memberikan pengalaman photobooth yang lebih menarik dan interaktif bagi pengguna. Proyek ini dibuat didasari dengan permasalahan yang terjadi pada pameran yang menggunakan photobooth dengan depth sensing camera, bahwa mereka kesulitan jika harus selalu membeli camera depth sensing untuk photobooth.
 
 Tampilan Utama                              | Tampilan Kata                              | Tampilan Praktik
 --------------------------------------------|--------------------------------------------|--------------------------------------------
@@ -9,7 +9,7 @@ Tampilan Utama                              | Tampilan Kata                     
 
 ### Link Berkas PA
 
-(diisi link Google Drive kelompok PA yang telah disiapkan oleh Tim PA)
+https://docs.google.com/document/d/1TFoFSJ4JaZrGYUar_MFSpBhZqXw8WqJtDmAe1z2s8LE/edit?tab=t.0
 
 ### Susunan Tim
 
