@@ -16,9 +16,12 @@
 package com.google.mediapipe.examples.poselandmarker
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -31,6 +34,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
 
     private var results: PoseLandmarkerResult? = null
     private var pointPaint = Paint()
+    private var dressBitmap: Bitmap? = null
+    private var dressRect = RectF()
 
     private var scaleFactor: Float = 1f
     private var imageWidth: Int = 1
@@ -38,6 +43,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
 
     init {
         initPaints()
+        // Load the dress image
+        dressBitmap = BitmapFactory.decodeResource(resources, R.drawable.dress)
     }
 
     fun clear() {
@@ -56,18 +63,47 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         results?.let { poseLandmarkerResult ->
-            for(landmark in poseLandmarkerResult.landmarks()) {
-                for(normalizedLandmark in landmark) {
-                    canvas.drawPoint(
-                        normalizedLandmark.x() * imageWidth * scaleFactor,
-                        normalizedLandmark.y() * imageHeight * scaleFactor,
-                        pointPaint
-                    )
+            // Cek apakah landmarks tidak kosong
+            if (poseLandmarkerResult.landmarks().isNotEmpty()) {
+                for (landmark in poseLandmarkerResult.landmarks()) {
+                    for (normalizedLandmark in landmark) {
+                        canvas.drawPoint(
+                            normalizedLandmark.x() * imageWidth * scaleFactor,
+                            normalizedLandmark.y() * imageHeight * scaleFactor,
+                            pointPaint
+                        )
+                    }
                 }
+
+                // Posisi dress berdasarkan landmarks
+                if (dressBitmap != null) {
+                    val landmarks = poseLandmarkerResult.landmarks()[0]
+                    if (landmarks.size > 1) { // Pastikan ada cukup landmark
+                        // Ambil landmark bahu dan pinggul
+                        val shoulderX = landmarks[11].x() * imageWidth * scaleFactor
+                        val shoulderY = landmarks[11].y() * imageHeight * scaleFactor
+                        val hipX = landmarks[24].x() * imageWidth * scaleFactor
+                        val hipY = landmarks[24].y() * imageHeight * scaleFactor
+
+                        // Hitung jarak antara bahu dan pinggul
+                        val distance = Math.sqrt(Math.pow(hipX.toDouble() - shoulderX.toDouble(), 2.0) + Math.pow(hipY.toDouble() - shoulderY.toDouble(), 2.0))
+
+                        // Skala baju berdasarkan jarak
+                        val dressWidth = (distance * 1.5).toFloat() // Sesuaikan faktor skala sesuai kebutuhan
+                        val dressHeight = dressBitmap!!.height * (dressWidth / dressBitmap!!.width)
+
+                        // Posisi dress di landmark bahu dengan offset
+                        val offsetX = 50f // Geser dress ke kiri
+                        dressRect.set(shoulderX - dressWidth / 2 - offsetX, shoulderY, shoulderX + dressWidth / 2 - offsetX, shoulderY + dressHeight)
+
+                        canvas.drawBitmap(dressBitmap!!, null, dressRect, null)
+                    }
+                }
+            } else {
+                // Tangani kasus di mana tidak ada landmarks
             }
         }
     }
-
     fun setResults(
         poseLandmarkerResults: PoseLandmarkerResult,
         imageHeight: Int,
