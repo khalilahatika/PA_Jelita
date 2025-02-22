@@ -18,4 +18,4 @@ Nama            | Username Github | Posisi
 Adam Aria Rahman | usernameMhs1    | Mahasiswa
 Khalilah Atika Akmal | khalilahatika   | Mahasiswa
 Fat’hah Noor Prawita | usernamePbb     | Pembimbing
-Nama Reviewer   | usernameRev     | Reviewer
+Rahmadi Wijaya   | usernameRev     | Reviewer
