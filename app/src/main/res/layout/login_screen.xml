@@ -1,0 +1,81 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/jelita_bg">
+
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="350dp"
+        android:layout_height="55dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_below="@id/emailLabel"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="35dp"
+        android:padding="16dp"
+        android:background="@drawable/edittext_background"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="350dp"
+        android:layout_height="55dp"
+        android:hint="Nama"
+        android:layout_below="@id/emailEditText"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="35dp"
+        android:padding="16dp"
+        android:background="@drawable/edittext_background"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/imageViewTitle"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="-230dp"
+        android:src="@drawable/logo_jelita" />
+
+
+    <TextView
+        android:id="@+id/textViewSlogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewTitle"
+        android:layout_marginTop="-425dp"
+        android:layout_marginStart="110dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="Ciptakan Pesona di Setiap Jepretan"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/emailLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Harap Masukkan email dan nama anda"
+        android:textSize="13sp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="345dp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:background="@drawable/roundstyle"
+        android:id="@+id/buttonStart"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/nameEditText"
+        android:layout_marginStart="141dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/grey_jelita"
+        android:fontFamily="@font/poppins_medium"
+        android:text="kirim"
+        android:textColor="#FFFFFF"/>
+
+</RelativeLayout>

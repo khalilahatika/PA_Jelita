@@ -23,6 +23,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.mediapipe.examples.poselandmarker.databinding.ActivityMainBinding
 
+
+
 class MainActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityMainBinding
     private val viewModel : MainViewModel by viewModels()
@@ -44,4 +46,6 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         finish()
     }
+
+
 }

@@ -1,0 +1,59 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/jelita_bg">
+
+
+    <Button
+        android:background="@drawable/roundstyle"
+        android:id="@+id/buttonStart"
+        android:layout_width="190dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/imageViewTitle"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="-290dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#1E1E1E"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Mulai"
+        android:textColor="#FFFFFF"/>
+
+
+    <Button
+        android:background="@drawable/roundstyle"
+        android:id="@+id/buttonExit"
+        android:layout_width="190dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/buttonStart"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Keluar"
+        android:textColor="#E60B89"/>
+
+    <ImageView
+        android:id="@+id/imageViewTitle"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="-100dp"
+        android:src="@drawable/logo_jelita" />
+
+
+    <TextView
+        android:id="@+id/textViewSlogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewTitle"
+        android:layout_marginTop="-340dp"
+        android:layout_marginStart="75dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="Ciptakan Pesona di Setiap Jepretan"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp" />
+
+
+</RelativeLayout>
