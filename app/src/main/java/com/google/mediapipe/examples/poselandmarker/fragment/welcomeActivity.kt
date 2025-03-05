@@ -1,31 +1,31 @@
-package com.google.mediapipe.examples.poselandmarker.fragment
-
-import com.google.mediapipe.examples.poselandmarker.MainActivity
-import com.google.mediapipe.examples.poselandmarker.R
+package com.example.yourapp
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.google.mediapipe.examples.poselandmarker.OverlayView
+import com.google.mediapipe.examples.poselandmarker.R
 
-class WelcomeActivity : AppCompatActivity() {
+class welcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.welcome_screen) // Menggunakan layout yang telah Anda buat
+        setContentView(R.layout.welcome_screen)
 
-        // Mengatur listener untuk tombol "Mulai"
-        findViewById<View>(R.id.buttonStart).setOnClickListener {
-            // Pindah ke MainActivity
-            val intent = Intent(this, MainActivity::class.java)
+        val buttonMulai: Button = findViewById(R.id.buttonStart)
+        val buttonKeluar: Button = findViewById(R.id.buttonExit)
+
+        buttonMulai.setOnClickListener {
+            // Navigasi ke aktivitas lain (misalnya, Activity2)
+            val intent = Intent(this, OverlayView::class.java)
             startActivity(intent)
-            finish() // Tutup WelcomeActivity agar tidak bisa kembali ke sini
         }
 
-        // Mengatur listener untuk tombol "Keluar"
-        findViewById<View>(R.id.buttonExit).setOnClickListener {
+        buttonKeluar.setOnClickListener {
             // Keluar dari aplikasi
-            finishAffinity() // Menutup semua activity dan keluar dari aplikasi
+            finish()
         }
     }
 }
