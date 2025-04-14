@@ -43,7 +43,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
 
     init {
         initPaints()
-        // Load the dress image
+
         dressBitmap = BitmapFactory.decodeResource(resources, R.drawable.dress)
     }
 
@@ -63,7 +63,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         results?.let { poseLandmarkerResult ->
-            // Cek apakah landmarks tidak kosong
+
             if (poseLandmarkerResult.landmarks().isNotEmpty()) {
                 for (landmark in poseLandmarkerResult.landmarks()) {
                     for (normalizedLandmark in landmark) {
@@ -75,32 +75,30 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
                     }
                 }
 
-                // Posisi dress berdasarkan landmarks
+
                 if (dressBitmap != null) {
                     val landmarks = poseLandmarkerResult.landmarks()[0]
-                    if (landmarks.size > 1) { // Pastikan ada cukup landmark
-                        // Ambil landmark bahu dan pinggul
+                    if (landmarks.size > 1) {
+
                         val shoulderX = landmarks[11].x() * imageWidth * scaleFactor
                         val shoulderY = landmarks[11].y() * imageHeight * scaleFactor
                         val hipX = landmarks[24].x() * imageWidth * scaleFactor
                         val hipY = landmarks[24].y() * imageHeight * scaleFactor
 
-                        // Hitung jarak antara bahu dan pinggul
+
                         val distance = Math.sqrt(Math.pow(hipX.toDouble() - shoulderX.toDouble(), 2.0) + Math.pow(hipY.toDouble() - shoulderY.toDouble(), 2.0))
 
-                        // Skala baju berdasarkan jarak
-                        val dressWidth = (distance * 1.5).toFloat() // Sesuaikan faktor skala sesuai kebutuhan
+
+                        val dressWidth = (distance * 1.5).toFloat()
                         val dressHeight = dressBitmap!!.height * (dressWidth / dressBitmap!!.width)
 
-                        // Posisi dress di landmark bahu dengan offset
-                        val offsetX = 50f // Geser dress ke kiri
+
+                        val offsetX = 50f
                         dressRect.set(shoulderX - dressWidth / 2 - offsetX, shoulderY, shoulderX + dressWidth / 2 - offsetX, shoulderY + dressHeight)
 
                         canvas.drawBitmap(dressBitmap!!, null, dressRect, null)
                     }
                 }
-            } else {
-                // Tangani kasus di mana tidak ada landmarks
             }
         }
     }
