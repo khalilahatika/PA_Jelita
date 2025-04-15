@@ -1,12 +1,10 @@
-package com.example.yourapp
+package com.google.mediapipe.examples.poselandmarker
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.google.mediapipe.examples.poselandmarker.OverlayView
-import com.google.mediapipe.examples.poselandmarker.R
+import com.google.mediapipe.examples.poselandmarker.loginActivity
 
 class welcomeActivity : AppCompatActivity() {
 
@@ -19,7 +17,7 @@ class welcomeActivity : AppCompatActivity() {
 
         buttonMulai.setOnClickListener {
             // Navigasi ke aktivitas lain (misalnya, Activity2)
-            val intent = Intent(this, OverlayView::class.java)
+            val intent = Intent(this, loginActivity::class.java)
             startActivity(intent)
         }
 
