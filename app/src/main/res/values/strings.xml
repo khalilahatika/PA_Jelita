@@ -56,4 +56,10 @@
         <item>Pose Landmarker Lite</item>
         <item>Pose Landmarker Heavy</item>
     </string-array>
+        <string name="star_button">Star Button</string>
+        <string name="camera_button">Camera Button</string>
+        <string name="hanger_button">Hanger Button</string>
+        <string name="undo_button">Undo Button</string>
+        <string name="gallery_button">Gallery Button</string>
+
 </resources>

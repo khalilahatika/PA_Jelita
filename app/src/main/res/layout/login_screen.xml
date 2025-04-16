@@ -41,6 +41,7 @@
         android:src="@drawable/logo_jelita" />
 
 
+
     <TextView
         android:id="@+id/textViewSlogan"
         android:layout_width="wrap_content"
@@ -77,5 +78,7 @@
         android:fontFamily="@font/poppins_medium"
         android:text="kirim"
         android:textColor="#FFFFFF"/>
+
+
 
 </RelativeLayout>
