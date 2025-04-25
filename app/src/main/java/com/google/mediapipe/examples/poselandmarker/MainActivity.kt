@@ -13,6 +13,8 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -35,6 +37,12 @@ class MainActivity : AppCompatActivity() {
         val btnUndo = findViewById<ImageButton>(R.id.btnUndo)
         val btnGallery = findViewById<ImageButton>(R.id.btnImage)
 
+        // Navigasi tombol Gallery
+        btnGallery.setOnClickListener {
+            val navController = findNavController(R.id.fragment_container)
+            navController.navigate(R.id.gallery_fragment)
+        }
+
         btnStar.setOnClickListener {
             // TODO: implement star action
         }
@@ -51,8 +59,19 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        btnGallery.setOnClickListener {
-            // TODO: implement gallery action
+        // 🔽 Tambahkan logika untuk hide UI saat GalleryFragment muncul
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val isGalleryFragment = destination.id == R.id.gallery_fragment
+            val visibility = if (isGalleryFragment) View.GONE else View.VISIBLE
+
+            overlayView.visibility = visibility
+            btnStar.visibility = visibility
+            btnCamera.visibility = visibility
+            btnHanger.visibility = visibility
+            btnUndo.visibility = visibility
+            btnGallery.visibility = visibility
         }
     }
 
@@ -61,7 +80,6 @@ class MainActivity : AppCompatActivity() {
         val height = targetView.height
         if (width == 0 || height == 0) return
 
-        // Create bitmap and canvas
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         targetView.draw(canvas)
@@ -70,7 +88,6 @@ class MainActivity : AppCompatActivity() {
         try {
             val filename = "screenshot_${System.currentTimeMillis()}.png"
             val fos: OutputStream? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                // Use MediaStore for API 29+
                 val values = ContentValues().apply {
                     put(MediaStore.Images.Media.DISPLAY_NAME, filename)
                     put(MediaStore.Images.Media.MIME_TYPE, "image/png")
@@ -79,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                 val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
                 uri?.let { contentResolver.openOutputStream(it) }
             } else {
-                // Legacy storage for API <29
                 val picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 val imageFile = File(picturesDir, filename)
                 FileOutputStream(imageFile)
@@ -94,5 +110,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        finish() }
+        finish()
+    }
 }

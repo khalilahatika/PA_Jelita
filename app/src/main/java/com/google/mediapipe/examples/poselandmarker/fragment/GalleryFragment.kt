@@ -89,9 +89,6 @@ class GalleryFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentGalleryBinding.fabGetContent.setOnClickListener {
-            getContent.launch(arrayOf("image/*", "video/*"))
-        }
 
         initBottomSheetControls()
     }
@@ -425,7 +422,6 @@ class GalleryFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     }
 
     private fun setUiEnabled(enabled: Boolean) {
-        fragmentGalleryBinding.fabGetContent.isEnabled = enabled
         fragmentGalleryBinding.bottomSheetLayout.detectionThresholdMinus.isEnabled =
             enabled
         fragmentGalleryBinding.bottomSheetLayout.detectionThresholdPlus.isEnabled =
