@@ -76,6 +76,7 @@ class GalleryFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             }
         }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

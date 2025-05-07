@@ -3,6 +3,7 @@ package com.google.mediapipe.examples.poselandmarker
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
@@ -14,9 +15,9 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     private var results: PoseLandmarkerResult? = null
     private var pointPaint = Paint()
     private var dressBitmaps: List<Bitmap>
-    private var currentDressIndex = 0
+    private var currentDressIndex = -1
     private var dressRect = RectF()
-
+    private var dressEnabled = false
     private var scaleFactor: Float = 1f
     private var imageWidth: Int = 1
     private var imageHeight: Int = 1
@@ -30,6 +31,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         )
     }
 
+
     fun clear() {
         results = null
         pointPaint.reset()
@@ -37,14 +39,49 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         initPaints()
     }
 
+    fun showDressA(index: Int) {
+        if (currentDressIndex == 0 && dressEnabled) {
+            currentDressIndex = -1
+            dressEnabled = false
+        } else {
+            currentDressIndex = 0
+            dressEnabled = true
+        }
+        invalidate()
+    }
+
+    fun showDressB(index: Int) {
+        if (currentDressIndex == 1 && dressEnabled) {
+            currentDressIndex = -1
+            dressEnabled = false
+        } else {
+            currentDressIndex = 1
+            dressEnabled = true
+        }
+        invalidate()
+    }
+
+
     private fun initPaints() {
         pointPaint.color = Color.YELLOW
         pointPaint.strokeWidth = LANDMARK_STROKE_WIDTH
         pointPaint.style = Paint.Style.FILL
     }
 
+    fun setDressByIndex(index: Int) {
+        if (index in dressBitmaps.indices) {
+            Log.d("OverlayView", "setDressByIndex dipanggil. Index baru: $index")
+            currentDressIndex = index
+            invalidate()
+        } else {
+            Log.d("OverlayView", "Index $index di luar batas list dressBitmaps")
+        }
+    }
+
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
+        Log.d("OverlayView", "Draw dipanggil. Instance: $this, Index baju: $currentDressIndex, Results: ${results != null}")
+
         results?.let { poseLandmarkerResult ->
             if (poseLandmarkerResult.landmarks().isNotEmpty()) {
                 for (landmark in poseLandmarkerResult.landmarks()) {
@@ -57,8 +94,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                     }
                 }
 
-                val dressBitmap = dressBitmaps.getOrNull(currentDressIndex)
-                if (dressBitmap != null) {
+                val dressBitmap = if (currentDressIndex >= 0) dressBitmaps.getOrNull(currentDressIndex) else null
+                if (dressEnabled && dressBitmap != null) {
                     val landmarks = poseLandmarkerResult.landmarks()[0]
                     if (landmarks.size > 24) {
                         val shoulderX = landmarks[11].x() * imageWidth * scaleFactor
@@ -89,6 +126,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         }
     }
 
+
+
     fun setResults(
         poseLandmarkerResults: PoseLandmarkerResult,
         imageHeight: Int,
@@ -108,17 +147,6 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         invalidate()
     }
 
-    fun setDressIndex(index: Int) {
-        if (index in dressBitmaps.indices) {
-            currentDressIndex = index
-            invalidate()
-        }
-    }
-
-    fun nextDress() {
-        currentDressIndex = (currentDressIndex + 1) % dressBitmaps.size
-        invalidate()
-    }
 
     companion object {
         private const val LANDMARK_STROKE_WIDTH = 12F

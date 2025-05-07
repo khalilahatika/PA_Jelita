@@ -35,8 +35,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import com.google.mediapipe.examples.poselandmarker.MainActivity
 import com.google.mediapipe.examples.poselandmarker.PoseLandmarkerHelper
 import com.google.mediapipe.examples.poselandmarker.MainViewModel
+import com.google.mediapipe.examples.poselandmarker.OverlayView
 import com.google.mediapipe.examples.poselandmarker.R
 import com.google.mediapipe.examples.poselandmarker.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -45,7 +47,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
+class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener, MainActivity.OverlayViewProvider {
 
     companion object {
         private const val TAG = "Pose Landmarker"
@@ -120,6 +122,10 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             FragmentCameraBinding.inflate(inflater, container, false)
 
         return fragmentCameraBinding.root
+    }
+
+    override fun getOverlayView(): OverlayView? {
+        return _fragmentCameraBinding?.overlay
     }
 
     @SuppressLint("MissingPermission")
