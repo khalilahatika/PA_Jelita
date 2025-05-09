@@ -96,6 +96,24 @@
             android:background="@drawable/circle"
             android:src="@drawable/baju_2"
             android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/btnOptionC"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerInside"
+            android:background="@drawable/circle"
+            android:src="@drawable/baju_3"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/btnOptionD"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerInside"
+            android:background="@drawable/circle"
+            android:src="@drawable/baju_4"
+            android:visibility="gone" />
     </LinearLayout>
 
 

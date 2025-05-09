@@ -28,6 +28,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         dressBitmaps = listOf(
             BitmapFactory.decodeResource(resources, R.drawable.dress),
             BitmapFactory.decodeResource(resources, R.drawable.dress_2),
+            BitmapFactory.decodeResource(resources, R.drawable.dress_3),
+            BitmapFactory.decodeResource(resources, R.drawable.dress_4)
         )
     }
 
@@ -39,28 +41,61 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         initPaints()
     }
 
-    fun showDressA(index: Int) {
-        if (currentDressIndex == 0 && dressEnabled) {
+    fun toggleDress(index: Int) {
+        if (currentDressIndex == index && dressEnabled) {
             currentDressIndex = -1
             dressEnabled = false
         } else {
-            currentDressIndex = 0
+            currentDressIndex = index
             dressEnabled = true
         }
         invalidate()
     }
 
-    fun showDressB(index: Int) {
-        if (currentDressIndex == 1 && dressEnabled) {
-            currentDressIndex = -1
-            dressEnabled = false
-        } else {
-            currentDressIndex = 1
-            dressEnabled = true
-        }
-        invalidate()
-    }
-
+//    fun showDressA(index: Int) {
+//        if (currentDressIndex == 0 && dressEnabled) {
+//            currentDressIndex = -1
+//            dressEnabled = false
+//        } else {
+//            currentDressIndex = 0
+//            dressEnabled = true
+//        }
+//        invalidate()
+//    }
+//
+//    fun showDressB(index: Int) {
+//        if (currentDressIndex == 1 && dressEnabled) {
+//            currentDressIndex = -1
+//            dressEnabled = false
+//        } else {
+//            currentDressIndex = 1
+//            dressEnabled = true
+//        }
+//        invalidate()
+//    }
+//
+//    fun showDressC() {
+//        if (currentDressIndex == 2 && dressEnabled) {
+//            currentDressIndex = -1
+//            dressEnabled = false
+//        } else {
+//            currentDressIndex = 2
+//            dressEnabled = true
+//        }
+//        invalidate()
+//    }
+//
+//    fun showDressD() {
+//        if (currentDressIndex == 3 && dressEnabled) {
+//            currentDressIndex = -1
+//            dressEnabled = false
+//        } else {
+//            currentDressIndex = 3
+//            dressEnabled = true
+//        }
+//        invalidate()
+//    }
+//
 
     private fun initPaints() {
         pointPaint.color = Color.YELLOW

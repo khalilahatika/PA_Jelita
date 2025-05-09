@@ -47,6 +47,15 @@ class MainActivity : AppCompatActivity() {
         val btnGallery = findViewById<ImageButton>(R.id.btnImage)
         val btnOptionA = findViewById<ImageButton>(R.id.btnOptionA)
         val btnOptionB = findViewById<ImageButton>(R.id.btnOptionB)
+        val btnOptionC = findViewById<ImageButton>(R.id.btnOptionC)
+        val btnOptionD = findViewById<ImageButton>(R.id.btnOptionD)
+
+        // Set semua tombol opsi tersembunyi saat mulai
+        btnOptionA.visibility = View.GONE
+        btnOptionB.visibility = View.GONE
+        btnOptionC.visibility = View.GONE
+        btnOptionD.visibility = View.GONE
+        isOptionsVisible = false
 
         // Navigasi tombol Gallery
         btnGallery.setOnClickListener {
@@ -64,43 +73,63 @@ class MainActivity : AppCompatActivity() {
 
         btnHanger.setOnClickListener {
             if (!isOptionsVisible) {
-                // Tampilkan tombol opsi
+                // Tampilkan semua tombol opsi
                 btnOptionA.visibility = View.VISIBLE
                 btnOptionB.visibility = View.VISIBLE
+                btnOptionC.visibility = View.VISIBLE
+                btnOptionD.visibility = View.VISIBLE
             } else {
-                // Sembunyikan tombol opsi
+                // Sembunyikan semua tombol opsi
                 btnOptionA.visibility = View.GONE
                 btnOptionB.visibility = View.GONE
+                btnOptionC.visibility = View.GONE
+                btnOptionD.visibility = View.GONE
             }
             isOptionsVisible = !isOptionsVisible
         }
 
         btnOptionA.setOnClickListener {
             getOverlayViewFromFragment()?.apply {
-                showDressA(0)
+                toggleDress(0)
                 setDressByIndex(0)
-                Log.d(TAG, "btnOptionA klik - instance: $this")
+                Log.d(TAG, "btnOptionA clicked - instance: $this")
             } ?: run {
                 Log.e(TAG, "OverlayView is null when trying to set dress A")
             }
             Toast.makeText(this, "Opsi A dipilih", Toast.LENGTH_SHORT).show()
-            btnOptionA.visibility = View.GONE
-            btnOptionB.visibility = View.GONE
-            isOptionsVisible = false
         }
 
         btnOptionB.setOnClickListener {
             getOverlayViewFromFragment()?.apply {
-                showDressB(1)
+                toggleDress(1)
                 setDressByIndex(1)
-                Log.d(TAG, "btnOptionB klik - instance: $this")
+                Log.d(TAG, "btnOptionB clicked - instance: $this")
             } ?: run {
                 Log.e(TAG, "OverlayView is null when trying to set dress B")
             }
             Toast.makeText(this, "Opsi B dipilih", Toast.LENGTH_SHORT).show()
-            btnOptionA.visibility = View.GONE
-            btnOptionB.visibility = View.GONE
-            isOptionsVisible = false
+        }
+
+        btnOptionC.setOnClickListener {
+            getOverlayViewFromFragment()?.apply {
+                toggleDress(2)
+                setDressByIndex(2)
+                Log.d(TAG, "btnOptionC clicked - instance: $this")
+            } ?: run {
+                Log.e(TAG, "OverlayView is null when trying to set dress C")
+            }
+            Toast.makeText(this, "Opsi C dipilih", Toast.LENGTH_SHORT).show()
+        }
+
+        btnOptionD.setOnClickListener {
+            getOverlayViewFromFragment()?.apply {
+                toggleDress(3)
+                setDressByIndex(3)
+                Log.d(TAG, "btnOptionD clicked - instance: $this")
+            } ?: run {
+                Log.e(TAG, "OverlayView is null when trying to set dress D")
+            }
+            Toast.makeText(this, "Opsi D dipilih", Toast.LENGTH_SHORT).show()
         }
 
         btnUndo.setOnClickListener {
@@ -112,7 +141,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            handleDestinationChange(destination, btnStar, btnCamera, btnHanger, btnUndo, btnGallery, btnOptionA, btnOptionB)
+            handleDestinationChange(destination, btnStar, btnCamera, btnHanger, btnUndo, btnGallery, btnOptionA, btnOptionB, btnOptionC, btnOptionD)
         }
     }
 
@@ -129,6 +158,9 @@ class MainActivity : AppCompatActivity() {
         // Always hide option buttons when navigating
         buttons.find { it.id == R.id.btnOptionA }?.visibility = View.GONE
         buttons.find { it.id == R.id.btnOptionB }?.visibility = View.GONE
+        buttons.find { it.id == R.id.btnOptionC }?.visibility = View.GONE
+        buttons.find { it.id == R.id.btnOptionD }?.visibility = View.GONE
+
         isOptionsVisible = false
     }
 
