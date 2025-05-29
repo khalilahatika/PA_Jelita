@@ -53,10 +53,12 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener, Main
         private const val TAG = "Pose Landmarker"
     }
 
+
     private var _fragmentCameraBinding: FragmentCameraBinding? = null
 
-    private val fragmentCameraBinding
-        get() = _fragmentCameraBinding!!
+
+    // Di CameraFragment, tambahkan properti ini jika belum ada:
+    val fragmentCameraBinding get() = _fragmentCameraBinding!!
 
     private lateinit var poseLandmarkerHelper: PoseLandmarkerHelper
     private val viewModel: MainViewModel by activityViewModels()

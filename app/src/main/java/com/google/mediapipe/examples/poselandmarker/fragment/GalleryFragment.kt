@@ -15,6 +15,7 @@
  */
 package com.google.mediapipe.examples.poselandmarker.fragment
 
+import android.content.ContentUris
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -31,8 +32,11 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.mediapipe.examples.poselandmarker.MainViewModel
 import com.google.mediapipe.examples.poselandmarker.PoseLandmarkerHelper
+import com.google.mediapipe.examples.poselandmarker.R
 import com.google.mediapipe.examples.poselandmarker.databinding.FragmentGalleryBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.*
@@ -47,6 +51,8 @@ class GalleryFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         VIDEO,
         UNKNOWN
     }
+
+
 
     private var _fragmentGalleryBinding: FragmentGalleryBinding? = null
     private val fragmentGalleryBinding
@@ -76,7 +82,34 @@ class GalleryFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             }
         }
 
+    private fun loadImagesFromAppFolder(): List<Uri> {
+        val imageUris = mutableListOf<Uri>()
+        val projection = arrayOf(
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.RELATIVE_PATH
+        )
+        val selection = "${MediaStore.Images.Media.RELATIVE_PATH} LIKE ?"
+        val selectionArgs = arrayOf("%Pictures/PoseLandmarker%")
+        val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
+        val query = requireContext().contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            selectionArgs,
+            sortOrder
+        )
+
+        query?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idColumn)
+                val contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                imageUris.add(contentUri)
+            }
+        }
+        return imageUris
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -91,8 +124,31 @@ class GalleryFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val recyclerView = fragmentGalleryBinding.recyclerViewGallery
+        val images = loadImagesFromAppFolder()
+
+        val adapter = GalleryAdapter(images) { uri ->
+            val fullscreenFragment = FullscreenImageFragment.newInstance(uri) {
+                // Setelah foto dihapus, reload galeri
+                loadGallery()
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fullscreenFragment) // GANTI dengan ID container yg benar
+                .addToBackStack(null)
+                .commit()
+        }
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+
+        // Tombol back (jika ada di layout)
+        fragmentGalleryBinding.btnUndo.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         initBottomSheetControls()
     }
+
+
 
     override fun onPause() {
         fragmentGalleryBinding.overlay.clear()
@@ -102,7 +158,19 @@ class GalleryFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         fragmentGalleryBinding.videoView.visibility = View.GONE
         super.onPause()
     }
-
+    private fun loadGallery() {
+        val updatedImages = loadImagesFromAppFolder()
+        val adapter = GalleryAdapter(updatedImages) { uri ->
+            val fullscreenFragment = FullscreenImageFragment.newInstance(uri) {
+                loadGallery()
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fullscreenFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+        fragmentGalleryBinding.recyclerViewGallery.adapter = adapter
+    }
     private fun initBottomSheetControls() {
         // init bottom sheet settings
         fragmentGalleryBinding.bottomSheetLayout.maxPosesValue.text =

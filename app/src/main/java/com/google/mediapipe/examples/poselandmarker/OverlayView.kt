@@ -52,50 +52,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         invalidate()
     }
 
-//    fun showDressA(index: Int) {
-//        if (currentDressIndex == 0 && dressEnabled) {
-//            currentDressIndex = -1
-//            dressEnabled = false
-//        } else {
-//            currentDressIndex = 0
-//            dressEnabled = true
-//        }
-//        invalidate()
-//    }
-//
-//    fun showDressB(index: Int) {
-//        if (currentDressIndex == 1 && dressEnabled) {
-//            currentDressIndex = -1
-//            dressEnabled = false
-//        } else {
-//            currentDressIndex = 1
-//            dressEnabled = true
-//        }
-//        invalidate()
-//    }
-//
-//    fun showDressC() {
-//        if (currentDressIndex == 2 && dressEnabled) {
-//            currentDressIndex = -1
-//            dressEnabled = false
-//        } else {
-//            currentDressIndex = 2
-//            dressEnabled = true
-//        }
-//        invalidate()
-//    }
-//
-//    fun showDressD() {
-//        if (currentDressIndex == 3 && dressEnabled) {
-//            currentDressIndex = -1
-//            dressEnabled = false
-//        } else {
-//            currentDressIndex = 3
-//            dressEnabled = true
-//        }
-//        invalidate()
-//    }
-//
+
 
     private fun initPaints() {
         pointPaint.color = Color.YELLOW

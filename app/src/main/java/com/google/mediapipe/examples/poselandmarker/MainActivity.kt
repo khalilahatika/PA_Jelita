@@ -9,15 +9,19 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.SurfaceView
+import android.view.TextureView
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.view.PreviewView
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import com.google.mediapipe.examples.poselandmarker.fragment.CameraFragment
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -50,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         val btnOptionC = findViewById<ImageButton>(R.id.btnOptionC)
         val btnOptionD = findViewById<ImageButton>(R.id.btnOptionD)
 
+
         // Set semua tombol opsi tersembunyi saat mulai
         btnOptionA.visibility = View.GONE
         btnOptionB.visibility = View.GONE
@@ -68,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnCamera.setOnClickListener {
-            captureAndSave(fragmentContainer)
+            captureAndSave() // Tanpa parameter
         }
 
         btnHanger.setOnClickListener {
@@ -176,20 +181,82 @@ class MainActivity : AppCompatActivity() {
         return null
     }
 
-    private fun captureAndSave(targetView: View) {
-        val width = targetView.width
-        val height = targetView.height
-        if (width == 0 || height == 0) return
+    private fun captureAndSave() {
+        // 1. Dapatkan referensi ke CameraFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? NavHostFragment
+        val currentFragment = navHostFragment?.childFragmentManager?.primaryNavigationFragment
 
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        targetView.draw(canvas)
+        if (currentFragment !is CameraFragment) {
+            Toast.makeText(this, "Anda harus berada di mode kamera", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        // Draw overlay if available
-        getOverlayViewFromFragment()?.draw(canvas)
+        // 2. Dapatkan TextureView/SurfaceView dari viewFinder
+        val viewFinder = currentFragment.fragmentCameraBinding.viewFinder
+
+        // 3. Dapatkan overlay view
+        val overlayView = getOverlayViewFromFragment()
+
+        // 4. Pastikan keduanya ada
+        if (viewFinder == null || overlayView == null) {
+            Toast.makeText(this, "Tidak dapat mengambil gambar", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         try {
-            val filename = "screenshot_${System.currentTimeMillis()}.png"
+            // 5. Dapatkan bitmap dari preview kamera - LETAKKAN KODE TERSEBUT DI SINI
+            val viewFinderBitmap = viewFinder.bitmap
+
+
+            if (viewFinderBitmap == null) {
+                Toast.makeText(this, "Tidak dapat mengambil gambar dari kamera", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            // 6. Buat bitmap baru dengan ukuran yang sama
+            val resultBitmap = Bitmap.createBitmap(
+                viewFinderBitmap.width,
+                viewFinderBitmap.height,
+                Bitmap.Config.ARGB_8888
+            )
+
+
+            // 7. Buat canvas dari bitmap hasil
+            val canvas = Canvas(resultBitmap)
+
+            // 8. Gambar preview kamera ke canvas
+            canvas.drawBitmap(viewFinderBitmap, 0f, 0f, null)
+
+            // 9. Ukur dan letakkan overlay di posisi yang benar
+            overlayView.measure(
+                View.MeasureSpec.makeMeasureSpec(viewFinderBitmap.width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(viewFinderBitmap.height, View.MeasureSpec.EXACTLY)
+            )
+            overlayView.layout(0, 0, viewFinderBitmap.width, viewFinderBitmap.height)
+
+            // 10. Gambar overlay ke canvas yang sama
+            overlayView.draw(canvas)
+
+            // 11. Simpan bitmap hasil ke galeri
+            saveToGallery(resultBitmap)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Gagal mengambil gambar: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val PreviewView.bitmap: Bitmap?
+        get() {
+            return Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888).also {
+                val canvas = Canvas(it)
+                this.draw(canvas)
+            }
+        }
+    // Metode terpisah untuk menyimpan bitmap ke galeri
+    private fun saveToGallery(bitmap: Bitmap) {
+        try {
+            val filename = "pose_landmarker_${System.currentTimeMillis()}.png"
             val fos: OutputStream? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val values = ContentValues().apply {
                     put(MediaStore.Images.Media.DISPLAY_NAME, filename)
@@ -199,18 +266,31 @@ class MainActivity : AppCompatActivity() {
                 val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
                 uri?.let { contentResolver.openOutputStream(it) }
             } else {
-                val picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                val imageFile = File(picturesDir, filename)
+                val imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                val appDir = File(imagesDir, "PoseLandmarker")
+                if (!appDir.exists()) appDir.mkdirs()
+                val imageFile = File(appDir, filename)
                 FileOutputStream(imageFile)
             }
 
             fos?.use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
-            Toast.makeText(this, "Screenshot tersimpan", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Gambar tersimpan ke galeri", Toast.LENGTH_SHORT).show()
         } catch (e: IOException) {
             e.printStackTrace()
             Toast.makeText(this, "Gagal menyimpan: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
+    // Extensi untuk mendapatkan bitmap dari TextureView/SurfaceView
+    private val TextureView.bitmap: Bitmap?
+        get() {
+            if (!isAvailable) return null
+
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            draw(canvas)
+            return bitmap
+        }
+
 
     override fun onBackPressed() {
         finish()
