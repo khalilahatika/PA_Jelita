@@ -76,15 +76,15 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
 
         results?.let { poseLandmarkerResult ->
             if (poseLandmarkerResult.landmarks().isNotEmpty()) {
-                for (landmark in poseLandmarkerResult.landmarks()) {
-                    for (normalizedLandmark in landmark) {
-                        canvas.drawPoint(
-                            normalizedLandmark.x() * imageWidth * scaleFactor,
-                            normalizedLandmark.y() * imageHeight * scaleFactor,
-                            pointPaint
-                        )
-                    }
-                }
+//                for (landmark in poseLandmarkerResult.landmarks()) {
+//                    for (normalizedLandmark in landmark) {
+//                        canvas.drawPoint(
+//                            normalizedLandmark.x() * imageWidth * scaleFactor,
+//                            normalizedLandmark.y() * imageHeight * scaleFactor,
+//                            pointPaint
+//                        )
+//                    }
+//                }
 
                 val dressBitmap = if (currentDressIndex >= 0) dressBitmaps.getOrNull(currentDressIndex) else null
                 if (dressEnabled && dressBitmap != null) {

@@ -1,5 +1,6 @@
 package com.google.mediapipe.examples.poselandmarker.fragment
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -34,18 +35,24 @@ class FullscreenImageFragment : Fragment() {
         }
 
         binding.btnDelete.setOnClickListener {
-            try {
-                val rowsDeleted = requireContext().contentResolver.delete(imageUri, null, null)
-                if (rowsDeleted > 0) {
-                    onImageDeleted()
-                } else {
-                    // Tambahkan log jika gagal
-                    android.util.Log.e("DeleteImage", "Gagal menghapus image: $imageUri")
+            AlertDialog.Builder(requireContext())
+                .setTitle("Hapus Foto")
+                .setMessage("Apakah Anda yakin ingin menghapus foto ini? Tindakan ini tidak dapat dibatalkan.")
+                .setPositiveButton("Hapus") { _, _ ->
+                    try {
+                        val rowsDeleted = requireContext().contentResolver.delete(imageUri, null, null)
+                        if (rowsDeleted > 0) {
+                            onImageDeleted()
+                        } else {
+                            android.util.Log.e("DeleteImage", "Gagal menghapus image: $imageUri")
+                        }
+                    } catch (e: Exception) {
+                        android.util.Log.e("DeleteImage", "Error deleting image: ${e.message}")
+                    }
+                    parentFragmentManager.popBackStack()
                 }
-            } catch (e: Exception) {
-                android.util.Log.e("DeleteImage", "Error deleting image: ${e.message}")
-            }
-            parentFragmentManager.popBackStack()
+                .setNegativeButton("Batal", null)
+                .show()
         }
     }
 
