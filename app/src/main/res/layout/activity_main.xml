@@ -47,17 +47,6 @@
         android:background="#00000000">
 
         <ImageButton
-            android:id="@+id/btnStar"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/circle"
-            android:src="@drawable/baseline_auto_awesome_24"
-            android:contentDescription="@string/star_button"
-            android:scaleType="centerInside"
-            android:padding="12dp" />
-
-        <ImageButton
             android:id="@+id/btncamerar"
             android:layout_width="60dp"
             android:layout_height="60dp"
